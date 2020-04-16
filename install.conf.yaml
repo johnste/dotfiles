@@ -5,5 +5,7 @@
         path: ssh/config
         create: true
     ~/.zshrc: zshrc
+    ~/.hammerspoon: hammerspoon
+    ~/.finicky.js: finicky.js
 
 
