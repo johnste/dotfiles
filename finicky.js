@@ -12,7 +12,7 @@ module.exports = {
         decodeURIComponent(
           urlString.substring("https://slack-redir.net/link?url=".length)
         ),
-    },    
+    },
     {
       match: finicky.matchHostnames(["www.amazon.com"]),
       url: ({ url }) => ({
@@ -28,39 +28,13 @@ module.exports = {
       match: finicky.matchHostnames("open.spotify.com"),
       browser: "Spotify",
     },
-    {
-      match: /example3/,
-      browser: () => {
-        return {
-          name: "Google Chrome",
-          openInBackground: true,
-        };
-      },
-    },
-    {
-      match: /example1/,
-      browser: () => {
-        return {
-          name: "Google Chrome",
-          openInBackground: true,
-        };
-      },
-    },
-    {
-      match: /example2/,
-      browser: () => {
-        return {
-          name: "Google Chrome",
-          openInBackground: true,
-        };
-      },
-    },
+
 
     {
       // Open workplace related sites in work browser
       match: [
-        /unomaly/,
-        /logicmonitor/,
+        /mhdev/,
+        /mathem/,
         finicky.matchHostnames([
           "localhost",
           "xd.adobe.com",
