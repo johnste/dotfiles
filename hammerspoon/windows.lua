@@ -3,8 +3,8 @@ audio = require 'hs.audiodevice'
 utils.hyper = { "shift", "alt", "ctrl" }
 utils.viper = { "shift", "alt", "ctrl", "cmd" }
 
-margin = 5
-vmargin = 5
+margin = 0
+vmargin = 0
 
 function getScreen(callback)
 	return function()

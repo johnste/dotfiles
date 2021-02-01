@@ -7,5 +7,6 @@
     ~/.zshrc: zshrc
     ~/.hammerspoon: hammerspoon
     ~/.finicky.js: finicky.js
+    ~/.config/karabiner/karabiner.json: karabiner.json
 
 
