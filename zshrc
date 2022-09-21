@@ -105,7 +105,7 @@ export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
 
 export PATH="/usr/local/opt/node@14/bin:$PATH"
-export GITHUB_TOKEN="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"
+
 export SAM_CLI_TELEMETRY=0
 
 ## Auto install and use local node version with if nvmrc is found
