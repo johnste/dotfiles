@@ -5,22 +5,19 @@ function always()
 	return true
 end
 
-function utils.reloadConfig(files)
-    doReload = false
-    for _,file in pairs(files) do
-        if file:sub(-4) == ".lua" then
-            doReload = true
-        end
-    end
-    if doReload then
-        hs.reload()
-    end
-end
 
 local layout = hs.keycodes.currentLayout()
 if (string.find(layout, "Swedish")) then
-    hs.eventtap.keyStroke({}, 'f3')
-    utils.reloadConfig({os.getenv("HOME") .. "/.hammerspoon/init.lua"})
+
+    hs.notify.new({
+        title="Hammerspoon",
+        informativeText="Change to english layout please"
+    }):send()
+
+    hs.timer.doAfter(5, function()
+        utils.reloadConfig({os.getenv("HOME") .. "/.hammerspoon/init.lua"})
+    end)
+
 else
 
     hs.pathwatcher.new(os.getenv("HOME") .. "/.hammerspoon/", utils.reloadConfig):start()
@@ -33,60 +30,83 @@ else
     hs.hotkey.bind(utils.hyper, "M", utils.maximize)
     hs.hotkey.bind(utils.hyper, "Up", utils.grow)
     hs.hotkey.bind(utils.hyper, "Down", utils.shrink)
-    hs.hotkey.bind(utils.hyper, "/", utils.showHelium)
-    hs.hotkey.bind(utils.hyper, ".", utils.showHelium2)
 
     -- App switching
     bindHotkeys({
+        { key = "1", name = "Obsidian" },
         { key = "2", askFirst = always, name = "Firefox" },
+
         { key = "Q", askFirst = always, name = "Slack"},
-        { key = "W", askFirst = always, bundleId = "com.microsoft.VSCode"},
-        { key = "E", name = "Spotify"},        
-        { key = "S", name = "Sublime Text"},        
+        { key = "W", bundleId = "com.microsoft.VSCode"},
+        { key = "E", name = "Spotify"},
+        -- { key = "A", askFirst = always, name = "Brave Browser" },
+        { key = "S", name = "Sublime Text"},
         { key = "D", name = "iTerm"},
-        { key = "F", name = "Helium"},
-        { key = "Z", name = "Finder"},        
-        { key = "X", askFirst = always, name = "Chrome", bundleId= 'com.google.Chrome'},                
-        { key = "1", name = "Notes"},
-        { key = "R", name = "Reminders"},
+
+        -- { key = "F", name = "Helium"},
+
+        { key = "Z", name = "Finder"},
+        { key = "X", askFirst = always, name = "Chrome", bundleId= 'com.google.Chrome'},
+        -- { key = "R", name = "Reminders"},
     })
 
-    hs.hotkey.bind({}, 'f13', function()
-        hs.eventtap.keyStroke({'alt'}, 'k', 5)
-        hs.eventtap.keyStroke({}, 'a', 5)
+    hs.hotkey.bind(utils.hyper, "v", function()
+        local shell_command = "date +\"Week: %U\""
+        local weekNumber = hs.execute(shell_command)
+        hs.notify.show(weekNumber, "", "")
     end)
 
-    hs.hotkey.bind({'shift'}, 'f13', function()
-        hs.eventtap.keyStroke({'alt'}, 'k', 5)
-        hs.eventtap.keyStroke({'shift'}, 'a', 5)
-    end)
-    ---
-    hs.hotkey.bind({}, 'f14', function()
-        hs.eventtap.keyStroke({'alt'}, 'u', 5)
-        hs.eventtap.keyStroke({}, 'a', 5)
+    hs.hotkey.bind(utils.hyper, 'return', function()
+
+        function resize(id, screenId, callback)
+            local screens = hs.screen.allScreens()
+            local app = hs.application.get(id)
+            if app then
+                local wins = app:allWindows()
+                print(id)
+                print(#wins)
+                if #wins > 0 then
+                    local screenFrame = screens[screenId]:frame()
+                    callback(id, screenFrame, wins[1])
+                    wins[1]:setFrame(screenFrame)
+                    wins[1]:raise()
+                end
+            end
+        end
+
+        resize("com.google.Chrome", 1, function(id, frame, win)
+            frame.w = frame.w * 0.5
+
+        end)
+
+        resize("Firefox", 2, function(id, frame, win)
+            frame.w = frame.w * 0.5
+        end)
+
+        resize("Slack", 1, function(id, frame, win)
+            frame.x = frame.x + frame.w * 0.33
+            frame.w = frame.w * 0.67
+
+        end)
+
+
+        resize("com.microsoft.VSCode", 1, function(id, frame, win)
+            frame.x = frame.w * 0.33
+            frame.w = frame.w * 0.67
+            wins[1]:focus()
+        end)
+
+
+
+
     end)
 
-    hs.hotkey.bind({'shift'}, 'f14', function()
-        hs.eventtap.keyStroke({'alt'}, 'u', 5)
-        hs.eventtap.keyStroke({'shift'}, 'a', 5)
-    end)
-    ---
-    hs.hotkey.bind({}, 'f15', function()
-        hs.eventtap.keyStroke({'alt'}, 'u', 5)
-        hs.eventtap.keyStroke({}, 'o', 5)
-    end)
-
-    hs.hotkey.bind({'shift'}, 'f15', function()
-        hs.eventtap.keyStroke({'alt'}, 'u', 5)
-        hs.eventtap.keyStroke({'shift'}, 'o', 5)
-    end)
-
-    -------------------
-    hs.hotkey.bind(utils.hyper, '[', function()        
+    ------------------- swedish characters -------------------
+    hs.hotkey.bind(utils.hyper, '[', function()
         hs.eventtap.keyStroke({'alt'}, 'a', 5)
     end)
 
-    hs.hotkey.bind(utils.viper, '[', function()        
+    hs.hotkey.bind(utils.viper, '[', function()
         hs.eventtap.keyStroke({'alt', 'shift'}, 'a', 5)
     end)
 
@@ -94,7 +114,6 @@ else
         hs.eventtap.keyStroke({'alt'}, 'u', 5)
         hs.eventtap.keyStroke({}, 'a', 5)
     end)
-
 
     hs.hotkey.bind(utils.viper, "'", function()
         hs.eventtap.keyStroke({'alt'}, 'u', 5)

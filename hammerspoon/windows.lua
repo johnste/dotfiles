@@ -50,70 +50,26 @@ end
 
 function utils.focusApp(name)
 	return utils.getApplicationWindows(name, function()
-
 		local app = hs.application.get(name)
-		-- local w = app:allWindows()
 		if (not app) then
 		 	return hs.application.launchOrFocus(name)
 		else
 			return hs.application.launchOrFocus(name)
 		end
-		-- else
-		-- 	local x
-		-- 	if w[0] ~= nil then
-		-- 	    x = w[0]
-		-- 	else
-		-- 	    x = w[1]
-		-- 	end
-		-- 	x:focus()
-			-- app:activate()
-		--  end
 	end)
 end
 
 function utils.focusAppByBundleId(bundleId)
 	return utils.getApplicationWindows(bundleId, function()
 
-		if ("com.google.Chrome.canary" == bundleId) then
-			local app = hs.application.get(bundleId)
-
-			if (not app) then
-				print("Start")
-			 	return hs.application.launchOrFocusByBundleID(bundleId)
-			else
-				print("Ciao")
-
-				local w = app:allWindows()
-
-				if (#w == 0) then
-					return hs.application.launchOrFocusByBundleID(bundleId)
-				end
-
-				local x
-				if w[0] ~= nil then
-				    x = w[0]
-				else
-				    x = w[1]
-				end
-
-				if (x:isMinimized()) then
-					x:unminimize();
-				else
-					x:focus()
-				end
-			end
+		local app = hs.application.get(bundleId)
+		if (not app) then
+			print("Start whatever")
+			return hs.application.launchOrFocusByBundleID(bundleId)
 		else
-			local app = hs.application.get(bundleId)
-			if (not app) then
-				print("Start whatever")
-			 	return hs.application.launchOrFocusByBundleID(bundleId)
-			else
-				return hs.application.launchOrFocusByBundleID(bundleId)
-			end
-			 -- return hs.application.launchOrFocusByBundleID(bundleId)
+			return hs.application.launchOrFocusByBundleID(bundleId)
 		end
-
-
+			-- return hs.application.launchOrFocusByBundleID(bundleId)
 	end)
 end
 
@@ -276,32 +232,6 @@ function utils.shrink()
 	end)()
 end
 
-function utils.showHelium()
-	return getScreen(function(win, frame, screen, screenFrame)
-		local myFrame = hs.fnutils.copy(frame)
-		local framewidth = screenFrame.w * 0.30
-		local frameheight = framewidth * 10/16
-		myFrame.x = screenFrame.x + screenFrame.w - framewidth - margin / 2
-		myFrame.y = screenFrame.y + screenFrame.h - frameheight - vmargin
-		myFrame.w = framewidth - margin*2
-		myFrame.h = frameheight - vmargin*2
-		win:setFrame(myFrame)
-	end)()
-end
-
-function utils.showHelium2()
-	return getScreen(function(win, frame, screen, screenFrame)
-		local myFrame = hs.fnutils.copy(frame)
-		local framewidth = screenFrame.w * 0.30
-		local frameheight = framewidth * 10/16
-		myFrame.x = screenFrame.x + margin / 2
-		myFrame.y = screenFrame.y +  vmargin
-		myFrame.w = framewidth - margin*2
-		myFrame.h = frameheight - vmargin*2
-		win:setFrame(myFrame)
-	end)()
-end
-
 local alertuuid = ""
 
 function utils.showMessage(message, textFont)
@@ -332,9 +262,19 @@ function dump(o)
     end
 end
 
-function trim(s)
-    return s:match "^%s*(.-)%s*$"
+function utils.reloadConfig(files)
+    doReload = false
+
+    for _,file in pairs(files) do
+        if file:sub(-4) == ".lua" then
+            doReload = true
+        end
+    end
+    if doReload then
+        hs.reload()
+    end
 end
+
 
 
 return utils

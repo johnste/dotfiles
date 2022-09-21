@@ -2,6 +2,7 @@ module.exports = {
   defaultBrowser: "Firefox",
   options: {
     // urlShorteners: [],
+    logRequests: true
   },
   rewrite: [
     {
@@ -35,12 +36,20 @@ module.exports = {
       match: [
         /mhdev/,
         /mathem/,
+        /amazon/,
+        /\baws\b/,
         finicky.matchHostnames([
+          "www.figma.com",
+          "127.0.0.1",
           "localhost",
           "xd.adobe.com",
+          "www.google.com",
+          "meet.google.com",
           "docs.google.com",
           "app.teamtailor.com",
           "drive.google.com",
+          "mathem.atlassian.net",
+          "slack.com"
         ]),
       ],
       browser: "Google Chrome", // "Brave Browser", //, //"Firefox Developer Edition"
